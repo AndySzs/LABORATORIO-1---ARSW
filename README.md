@@ -2,7 +2,7 @@
 ### Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software - ARSW
 
-### Andres Sabogal - Marco
+### Andres Sabogal - Marco Alvarez
 
 ## Ejercicio Introducción al paralelismo - Hilos - Caso BlackListSearch
 
