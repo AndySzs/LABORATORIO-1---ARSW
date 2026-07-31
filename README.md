@@ -1,8 +1,10 @@
 
 ### Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software - ARSW
-## Ejercicio Introducción al paralelismo - Hilos - Caso BlackListSearch
 
+### Andres Sabogal - Marco
+
+## Ejercicio Introducción al paralelismo - Hilos - Caso BlackListSearch
 
 ### Dependencias:
 ####   Lecturas:
