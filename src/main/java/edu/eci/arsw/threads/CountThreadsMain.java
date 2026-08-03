@@ -6,13 +6,9 @@
 package edu.eci.arsw.threads;
 
 /**
- *
+ * @author
  * @author hcadavid
  */
-public class CountThreadsMain {
-    
-    public static void main(String a[]){
-        
-    }
-    
+public class CountThreadsMain{
+
 }
