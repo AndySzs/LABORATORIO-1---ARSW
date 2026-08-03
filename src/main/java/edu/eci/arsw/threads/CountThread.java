@@ -25,22 +25,9 @@ public class CountThread extends Thread {
 
     @Override
     public void run(){
-        System.out.println("El hilo" + a + "," + b + "Inicia");
-        this.orden(a,b);
-        System.out.println("\nEl hilo" + a + "," + b + "se termina");
-    }
-
-    /*
-    * Esta clase le llegan dos numeros enteros y su funcion es
-    * ordenar los numeros y mandarlos ala funcion "imprimir"
-    */
-
-    public void orden(int a, int b){
-        if(a<=b){
-            this.Imprimir(a,b);
-        }else {
-            this.Imprimir(b,a);
-        }
+        System.out.println("El hilo Inicia ");
+        this.Imprimir(a,b);
+        System.out.println("El hilo se termina ");
     }
 
     /*
@@ -50,7 +37,7 @@ public class CountThread extends Thread {
 
     public void Imprimir(int a,int b){
         for(int i = a;i<=b;i++){
-            System.out.print(" " + i);
+            System.out.println(i);
         }
     }
 
