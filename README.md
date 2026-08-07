@@ -24,6 +24,10 @@
 	3. Ejecute y revise la salida por pantalla. 
 	4. Cambie el incio con 'start()' por 'run()'. Cómo cambia la salida?, por qué?.
 
+- Con start() los numeros de los tres rangos salen mezclados y sin ningun orden (cambia en casda ejecucion). Esto es porque start() crea un hilo nuevo y el sistema reparte el tiempo de CPU entre los tres hilos, alternando su ejecucion.
+
+- Con run() los numeros salen en orden secuencial uno por uno; primero sale todo el rango del hilo 1, luego el hilo 2, y finalemente el hilo 3, sin mezclarse. Esto es porque run() es solo un metodo normal que no crea ningun hilo nuevo, entonces se ejecuta directamente en el hilo main y cada llamada debe terminar antes de que empiece la siguiente.
+
 **Parte II - Ejercicio Black List Search**
 
 
@@ -76,6 +80,69 @@ A partir de lo anterior, implemente la siguiente secuencia de experimentos para 
 Al iniciar el programa ejecute el monitor jVisualVM, y a medida que corran las pruebas, revise y anote el consumo de CPU y de memoria en cada caso. ![](img/jvisualvm.png)
 
 Con lo anterior, y con los tiempos de ejecución dados, haga una gráfica de tiempo de solución vs. número de hilos. Analice y plantee hipótesis con su compañero para las siguientes preguntas (puede tener en cuenta lo reportado por jVisualVM):
+
+## Parte III - Evaluación de Desempeño
+
+### Entorno de pruebas
+- Host analizado: 202.24.34.55 (IP dispersa en las listas negras)
+- Núcleos detectados: 12 (usando `Runtime.getRuntime().availableProcessors()`)
+- Todas las pruebas se corrieron en la misma máquina, una tras otra.
+
+### Tabla de resultados
+
+| N (hilos) | Descripción         | Tiempo (ms) | Tiempo (s) |
+|-----------|----------------------|-------------|------------|
+| 1         | 1 solo hilo           | 254,064.99  | 254.06     |
+| 12        | Núcleos disponibles   | 8,727.25    | 8.73       |
+| 24        | 2 x núcleos           | 11,383.26   | 11.38      |
+| 50        | 50 hilos              | 2,141.11    | 2.14       |
+| 100       | 100 hilos             | 1,104.70    | 1.10       |
+
+### Gráfica: Tiempo vs. Número de hilos
+
+![img.png](Grafica-ParteIII.png)
+
+### Lo que se vio en jVisualVM
+
+El CPU se mantuvo bajo durante toda la prueba, sin picos altos, y la memoria
+se mantuvo estable alrededor de 250 MB. Esto tiene sentido porque cada
+consulta a una lista negra simula una espera,
+así que los hilos pasan más tiempo esperando que trabajando.
+También se notó que el número de hilos activos subía según el N usado en cada
+prueba.
+
+### Análisis
+
+**¿Por qué mejora tanto de 1 a 12 hilos?**
+
+Con 1 hilo todo se hace uno por uno, sumando cada espera. Con 12 hilos,
+el trabajo se reparte y corre al mismo tiempo, así que el tiempo
+baja notablemente.
+
+**¿Por qué 24 hilos dio peor tiempo que 12, si son el doble?**
+
+Al pasar el número de núcleos, los hilos ya no caben todos "al mismo tiempo"
+en el procesador, así que la máquina tiene que ir turnándolos, 
+lo que hace que se demore más. También puede haber algo de variación normal entre
+una corrida y otra.
+
+**¿Por qué 50 y 100 hilos siguen mejorando, aunque haya solo 12 núcleos?**
+
+Porque la tarea no exige mucho cómputo, exige esperar. Como los hilos pasan
+la mayoría del tiempo esperando y no usando el procesador de verdad, se puede
+tener muchos más hilos "al mismo tiempo" sin que compitan tanto entre ellos.
+
+**¿Qué relación hay con el CPU y la memoria?**
+
+El CPU se mantuvo bajo en todos los casos, lo que confirma que el cuello de
+botella es la espera, no el procesamiento. La memoria tampoco subió mucho al
+aumentar los hilos, porque cada hilo guarda muy poca información.
+
+**¿Hay un número ideal de hilos?**
+
+No hay un límite claro marcado por los núcleos, porque la tarea es de espera
+y no de cálculo. El límite real seria crear demasiados hilos a la vez, pero con las pruebas
+hechas, 100 hilos fue el mejor resultado.
 
 **Parte IV - Ejercicio Black List Search**
 
