@@ -154,5 +154,44 @@ hechas, 100 hilos fue el mejor resultado.
 
 3. De acuerdo con lo anterior, si para este problema en lugar de 100 hilos en una sola CPU se pudiera usar 1 hilo en cada una de 100 máquinas hipotéticas, la ley de Amdahls se aplicaría mejor?. Si en lugar de esto se usaran c hilos en 100/c máquinas distribuidas (siendo c es el número de núcleos de dichas máquinas), se mejoraría?. Explique su respuesta.
 
+## Parte IV - Ejercicio Black List Search
 
+**¿Por qué el mejor desempeño no se logra con los 500 hilos?**
 
+La ley de Amdahl dice que la mejora del desempeño tiene un límite teórico por la parte secuencial del algoritmo, sin importar cuantos hilos agregues.
+En este caso al usar 500 hilos no da mejor desempeño, debido a que más allá de cierto punto los hilos no reducen el tiempo de ejecución, y pueden llegar a empeorar el tiempo de ejecución por la competencia de recursos.
+
+Según la ley de Amdahls con una parametrización al rededor del 0.8 obtenemos:
+
+Con 500 hilos:
+
+$$S(500) = \frac{1}{(1 - 0.8) + \frac{0.8}{500}} = \frac{1}{0.2 + 0.0016} = \frac{1}{0.2016} \approx \mathbf{4.96} \text{ veces más rápido.}$$
+
+**¿Cómo se compara este desempeño cuando se usan 200?**
+
+Con 200 hilos:
+
+$$S(200) = \frac{1}{(1 - 0.8) + \frac{0.8}{200}} = \frac{1}{0.2 + 0.004} = \frac{1}{0.204} \approx \mathbf{4.90} \text{ veces más rápido.}$$
+
+Vemos que hay un bajón del tiempo alrededor del 0.06 y 300 hilos menos utilizados.
+
+**¿Cómo se comporta la solución usando tantos hilos de procesamiento como núcleos comparado con el resultado de usar el doble de este?**
+
+Si vamos a utilizar tanto hilos como procesadores, es el punto óptimo, ya que no hay sobrecarga de recursos, mientras que si utilizamos el doble de hilos por el proceso de "context switching" hacemos que utilicemos muchos más recursos de los necesarios.
+
+Ejemplo con 100 hilos
+$$S(100) = \frac{1}{(1 - 0.8) + \frac{0.8}{100}} = \frac{1}{0.2 + 0.008} = \frac{1}{0.208} \approx \mathbf{4.81} \text{ veces más rápido.}$$
+Ejemplo con 200 hilos
+$$S(200) = \frac{1}{(1 - 0.8) + \frac{0.8}{200}} = \frac{1}{0.2 + 0.004} = \frac{1}{0.204} \approx \mathbf{4.90} \text{ veces más rápido.}$$
+
+**De acuerdo con lo anterior, si para este problema en lugar de 100 hilos en una sola CPU se pudiera usar 1 hilo en cada una de 100 máquinas hipotéticas, ¿la ley de Amdahls se aplicaría mejor?**
+
+Sí, la ley de Amdahl funcionaria mucho mejor debido a que con cada CPu aislada el hilo tendria sus propios recursos asi que teoricamente funcionaria al maximo de su capacidad.
+
+$$S(100) = \frac{1}{(1 - 0.95) + \frac{0.95}{100}} = \frac{1}{0.05 + 0.0095} = \frac{1}{0.0595} \approx \mathbf{16.8} \text{ veces más rápido.}$$
+
+**Si en lugar de esto se usaran c hilos en 100/c máquinas distribuidas (siendo c es el número de núcleos de dichas máquinas), se mejoraría?. Explique su respuesta.**
+
+No , debido a que se tienen que repartir los recursos de memoria y es menos eficiente que tener todas las maquinas asiladas.
+
+$$S(10){\text{}} = \frac{1}{(1 - 0.95) + \frac{0.95}{100} + \left(\frac{0.95 \cdot (1.1 - 1)}{10}\right)} = \frac{1}{0.05 + 0.0095 + \frac{0.095}{10}} = \frac{1}{0.05 + 0.0095 + 0.0095} = \frac{1}{0.069} \approx \mathbf{14.49} \text{ veces más rápido.}$$
