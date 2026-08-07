@@ -24,6 +24,10 @@
 	3. Ejecute y revise la salida por pantalla. 
 	4. Cambie el incio con 'start()' por 'run()'. Cómo cambia la salida?, por qué?.
 
+- Con start() los numeros de los tres rangos salen mezclados y sin ningun orden (cambia en casda ejecucion). Esto es porque start() crea un hilo nuevo y el sistema reparte el tiempo de CPU entre los tres hilos, alternando su ejecucion.
+
+- Con run() los numeros salen en orden secuencial uno por uno; primero sale todo el rango del hilo 1, luego el hilo 2, y finalemente el hilo 3, sin mezclarse. Esto es porque run() es solo un metodo normal que no crea ningun hilo nuevo, entonces se ejecuta directamente en el hilo main y cada llamada debe terminar antes de que empiece la siguiente.
+
 **Parte II - Ejercicio Black List Search**
 
 
